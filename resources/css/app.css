@@ -3,16 +3,181 @@
 
 @plugin "flowbite/plugin";
 
-
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../**/*.blade.php';
 @source '../**/*.js';
-
 @source "../../node_modules/flowbite";
 
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    --font-serif: 'Playfair Display', Georgia, serif;
+
+    /* Brand Colors */
+    --color-brand-900: #0f2545;
+    --color-brand-800: #1e3a5f;
+    --color-brand-700: #2d5282;
+    --color-brand-600: #3a6aa5;
+    --color-brand-500: #4a80c2;
+    --color-brand-100: #e8f0fb;
+    --color-brand-50:  #f0f5fd;
+
+    --color-gold-600:  #a07828;
+    --color-gold-500:  #c9a84c;
+    --color-gold-400:  #d9bc70;
+    --color-gold-100:  #fdf6e3;
+
+    --color-gray-50:   #f9fafb;
+    --color-gray-100:  #f3f4f6;
+    --color-gray-200:  #e5e7eb;
+    --color-gray-300:  #d1d5db;
+    --color-gray-400:  #9ca3af;
+    --color-gray-500:  #6b7280;
+    --color-gray-700:  #374151;
+    --color-gray-900:  #111827;
+}
+
+/* Global Base */
+body {
+    font-family: var(--font-sans);
+    color: var(--color-gray-900);
+    background-color: #fff;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Section Padding */
+.section-padding {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+
+@media (min-width: 640px) {
+    .section-padding {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .section-padding {
+        padding-left: 4rem;
+        padding-right: 4rem;
+    }
+}
+
+/* Section Title */
+.section-title {
+    font-family: var(--font-serif);
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-brand-800);
+    line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+    .section-title {
+        font-size: 2.5rem;
+    }
+}
+
+.section-subtitle {
+    font-size: 1rem;
+    color: var(--color-gray-500);
+    max-width: 38rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.75rem;
+    line-height: 1.7;
+}
+
+/* Buttons */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: var(--color-gold-500);
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.5rem;
+    border: 2px solid var(--color-gold-500);
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-gold-600);
+    border-color: var(--color-gold-600);
+    transform: translateY(-1px);
+}
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: transparent;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.5rem;
+    border: 2px solid rgba(255, 255, 255, 0.7);
+    transition: all 0.2s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.btn-outline:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+}
+
+/* Cards */
+.card-hover {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+/* Gold Divider */
+.gold-divider {
+    width: 4rem;
+    height: 3px;
+    background-color: var(--color-gold-500);
+    border-radius: 9999px;
+    margin: 0.75rem auto 0;
+}
+
+/* Navbar Custom */
+.navbar-custom {
+    background: rgba(255,255,255,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--color-gray-200);
+}
+
+/* Star Rating */
+.star-filled {
+    color: var(--color-gold-500);
+}
+
+/* Badge Kategori */
+.badge-kategori {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background-color: var(--color-gold-100);
+    color: var(--color-gold-600);
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
 }
