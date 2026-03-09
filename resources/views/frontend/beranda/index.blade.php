@@ -193,7 +193,7 @@
                     <p class="text-sm font-semibold uppercase tracking-widest mb-2" style="color: #c9a84c;">Hasil Kerja
                         Kami</p>
                     <h2 class="section-title text-left">Portofolio</h2>
-                    <div class="gold-divider !mx-0 !mt-3"></div>
+                    <div class="gold-divider mx-0 mt-3"></div>
                 </div>
                 <a href="{{ route('portofolio') }}"
                     class="text-sm font-semibold flex items-center gap-1.5 transition-colors" style="color: #1e3a5f;">
@@ -230,7 +230,7 @@
                 {{-- Track --}}
                 <div id="testimoni-track" class="flex gap-5 transition-transform duration-500 ease-in-out">
                     @foreach ($testimonis as $testimoni)
-                        <div class="flex-shrink-0 w-full sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]">
+                        <div class="shrink-0 w-full sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)]">
                             <x-testimoni-card :testimoni="$testimoni" />
                         </div>
                     @endforeach

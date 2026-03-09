@@ -62,6 +62,13 @@
                                 <span class="block text-sm text-gray-500 truncate">{{ Auth::user()->email }}</span>
                             </div>
                             <ul class="py-1" aria-labelledby="user-menu-button">
+                                @if (Auth::user()->role === 'admin')
+                                    <li>
+                                        <a href="{{ route('dashboard') }}"
+                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 font-semibold"
+                                            style="color: #c9a84c;">Dashboard Admin</a>
+                                    </li>
+                                @endif
                                 <li>
                                     <a href="{{ route('profile.edit') }}"
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
@@ -117,6 +124,11 @@
                         <span class="block text-sm font-medium text-gray-900">{{ Auth::user()->name }}</span>
                         <span class="block text-xs text-gray-500">{{ Auth::user()->email }}</span>
                     </div>
+                    @if (Auth::user()->role === 'admin')
+                        <a href="{{ route('dashboard') }}"
+                            class="block px-4 py-2.5 text-sm font-semibold hover:bg-gray-100"
+                            style="color: #c9a84c;">Dashboard Admin</a>
+                    @endif
                     <a href="{{ route('profile.edit') }}"
                         class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
                     <form method="POST" action="{{ route('logout') }}" class="w-full">

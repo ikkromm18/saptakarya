@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
             ProdukSeeder::class,
             PortfolioSeeder::class,
             TestimoniSeeder::class,
+            AdminSeeder::class,
         ]);
     }
 }

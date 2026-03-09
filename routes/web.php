@@ -15,6 +15,10 @@ Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
 Route::get('/portofolio', [PortfolioController::class, 'index'])->name('portofolio');
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 
+Route::get('/dashboard', function () {
+    return view('admin.dashboard');
+})->middleware(['auth', 'admin'])->name('dashboard');
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
