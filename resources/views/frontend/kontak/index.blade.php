@@ -24,7 +24,7 @@
                     {{-- Alamat --}}
                     <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                         <div class="flex items-start gap-4">
-                            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
                                 style="background-color: #e8f0fb;">
                                 <svg class="w-5 h-5" style="color: #1e3a5f;" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -37,9 +37,7 @@
                             <div>
                                 <h3 class="font-semibold text-gray-900 text-sm mb-1">Alamat</h3>
                                 <p class="text-gray-500 text-sm leading-relaxed">
-                                    Jl. Raya Percetakan No. 45<br>
-                                    Kec. Sukajadi, Bandung<br>
-                                    Jawa Barat 40161
+                                    Jl. KH Mansyur Gg 17 No. 21 Pekalongan Barat, Kota Pekalongan, Jawa Tengah
                                 </p>
                             </div>
                         </div>
@@ -48,7 +46,7 @@
                     {{-- Telepon & WA --}}
                     <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                         <div class="flex items-start gap-4">
-                            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
                                 style="background-color: #e8f0fb;">
                                 <svg class="w-5 h-5" style="color: #1e3a5f;" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -77,7 +75,7 @@
                     {{-- Email --}}
                     <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                         <div class="flex items-start gap-4">
-                            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
                                 style="background-color: #e8f0fb;">
                                 <svg class="w-5 h-5" style="color: #1e3a5f;" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -96,7 +94,7 @@
                     {{-- Jam Operasional --}}
                     <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
                         <div class="flex items-start gap-4">
-                            <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
                                 style="background-color: #e8f0fb;">
                                 <svg class="w-5 h-5" style="color: #1e3a5f;" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24">
@@ -132,7 +130,7 @@
                 <div class="lg:col-span-2">
                     <div class="rounded-2xl overflow-hidden border border-gray-100 shadow-sm h-full min-h-[400px]">
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126748.14586736348!2d107.53710893359375!3d-6.903446299999989!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e6398252477f%3A0x146a1f93d3e815b2!2sBandung%2C%20Jawa%20Barat!5e0!3m2!1sid!2sid!4v1709900000000!5m2!1sid!2sid"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d783.5112093917297!2d109.66679347227732!3d-6.893670834045925!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e702429a96ed3bb%3A0xd670d962bbab196d!2sJl.%20KH.%20Mansyur%2C%20Kec.%20Pekalongan%20Bar.%2C%20Kota%20Pekalongan%2C%20Jawa%20Tengah!5e1!3m2!1sid!2sid!4v1773012227879!5m2!1sid!2sid"
                             width="100%" height="100%" style="border:0; min-height: 450px;" allowfullscreen=""
                             loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Lokasi Saptakarya di Bandung">
                         </iframe>
