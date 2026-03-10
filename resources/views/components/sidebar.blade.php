@@ -16,6 +16,19 @@
                      </svg>
                      <span class="ms-3">Dashboard</span>
                  </a>
+             <li>
+                 <a href="{{ route('admin.users.index') }}"
+                     class="flex items-center px-3 py-2 text-gray-900 rounded-lg hover:bg-gray-100 group transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-gray-100 shadow-sm' : '' }}">
+                     <svg class="w-5 h-5 transition duration-75 text-gray-500 group-hover:text-gray-900 {{ request()->routeIs('admin.users.*') ? 'text-gray-900' : '' }}"
+                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         fill="none" viewBox="0 0 24 24">
+                         <path stroke="currentColor" stroke-linecap="round" stroke-width="2"
+                             d="M4.37 7.657c2.063.528 2.396 2.806 3.202 3.87 1.07 1.413 2.075 1.228 3.192 2.644 1.805 2.289 1.312 5.705 1.312 6.705M20 15h-1a4 4 0 0 0-4 4v1M8.587 3.992c0 .822.112 1.886 1.515 2.58 1.402.693 2.998-.901 3.654 2.32 .522 2.572-1.255 5.707-1.538 6.66-.538 1.8-1.08 1.41-3.214 3.046-1.611 1.23-2.133 3.411-2.133 3.411" />
+                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                             d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18Z" />
+                     </svg>
+                     <span class="ms-3">Kelola User</span>
+                 </a>
              </li>
 
              <!-- Spacer before back to site link -->

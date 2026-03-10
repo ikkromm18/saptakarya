@@ -62,7 +62,7 @@
                 </div>
 
                 <button type="submit"
-                    class="w-full btn-primary bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md mt-4 transition-colors">
+                    class="w-full text-center btn-primary bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md mt-4 transition-colors">
                     Daftar
                 </button>
             </form>

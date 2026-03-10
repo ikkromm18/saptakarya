@@ -15,9 +15,15 @@ Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
 Route::get('/portofolio', [PortfolioController::class, 'index'])->name('portofolio');
 Route::get('/kontak', [KontakController::class, 'index'])->name('kontak');
 
-Route::get('/dashboard', function () {
-    return view('admin.dashboard');
-})->middleware(['auth', 'admin'])->name('dashboard');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('dashboard');
+
+    Route::resource('admin/users', \App\Http\Controllers\Admin\UserController::class)
+        ->names('admin.users')
+        ->except('show'); // We might not need the show method for now
+});
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
