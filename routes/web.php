@@ -21,8 +21,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
     })->name('dashboard');
 
     Route::resource('admin/users', \App\Http\Controllers\Admin\UserController::class)
-        ->names('admin.users')
-        ->except('show'); // We might not need the show method for now
+        ->names('admin.users');
+
+    Route::resource('admin/orders', \App\Http\Controllers\Admin\OrderController::class)
+        ->names('admin.orders')
+        ->only(['index', 'show', 'update']);
+
+    Route::resource('admin/portfolios', \App\Http\Controllers\Admin\PortfolioController::class)
+        ->names('admin.portfolios');
+
+    Route::resource('admin/produks', \App\Http\Controllers\Admin\ProdukController::class)
+        ->names('admin.produks');
 });
 
 Route::middleware('guest')->group(function () {
@@ -32,9 +41,17 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
+use App\Http\Controllers\OrderController;
+
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+
+    // Pesanan User
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::post('/orders/{order}/payment', [OrderController::class, 'uploadPayment'])->name('orders.payment');
 });

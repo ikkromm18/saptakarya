@@ -23,7 +23,7 @@
                 @endphp
                 @foreach ($categories as $cat)
                     <button type="button"
-                        class="filter-btn flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border {{ $loop->first ? 'text-white border-transparent' : 'text-gray-600 border-gray-200 hover:border-gray-400 bg-white' }}"
+                        class="filter-btn shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border {{ $loop->first ? 'text-white border-transparent' : 'text-gray-600 border-gray-200 hover:border-gray-400 bg-white' }}"
                         style="{{ $loop->first ? 'background-color: #1e3a5f;' : '' }}" data-category="{{ $cat }}">
                         {{ $cat }}
                     </button>

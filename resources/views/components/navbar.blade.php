@@ -74,6 +74,11 @@
                                         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
                                 </li>
                                 <li>
+                                    <a href="{{ route('orders.index') }}"
+                                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 border-b border-gray-100">Riwayat
+                                        Transaksi</a>
+                                </li>
+                                <li>
                                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                                         @csrf
                                         <button type="submit"
@@ -131,6 +136,9 @@
                     @endif
                     <a href="{{ route('profile.edit') }}"
                         class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100">Profil Saya</a>
+                    <a href="{{ route('orders.index') }}"
+                        class="block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 border-b border-gray-200 shadow-sm">Riwayat
+                        Transaksi</a>
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
                         <button type="submit"

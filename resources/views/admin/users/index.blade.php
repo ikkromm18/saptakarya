@@ -21,12 +21,12 @@
                             class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
                             placeholder="Cari nama, email, no hp...">
                         <button type="submit"
-                            class="text-white absolute end-1.5 bottom-1.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-md text-xs px-3 py-1.5">Search</button>
+                            class="text-white absolute end-1.5 bottom-1.5 bg-[#1e3a5f] hover:bg-[#152842] focus:ring-4 focus:outline-none focus:ring-[#1e3a5f]/50 font-medium rounded-md text-xs px-3 py-1.5">Search</button>
                     </div>
                 </form>
 
                 <a href="{{ route('admin.users.create') }}"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2.5 focus:outline-none flex-shrink-0">
+                    class="text-white bg-[#1e3a5f] hover:bg-[#152842] focus:ring-4 focus:ring-[#1e3a5f]/50 font-medium rounded-lg text-sm px-4 py-2.5 focus:outline-none flex-shrink-0">
                     Tambah User
                 </a>
             </div>
@@ -60,6 +60,7 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                     <tr>
+                        <th scope="col" class="px-6 py-3">No</th>
                         <th scope="col" class="px-6 py-3">Nama Lengkap</th>
                         <th scope="col" class="px-6 py-3">Email</th>
                         <th scope="col" class="px-6 py-3">No HP</th>
@@ -69,6 +70,9 @@
                 <tbody>
                     @forelse($users as $user)
                         <tr class="bg-white border-b hover:bg-gray-50">
+                            <td class="px-6 py-4">
+                                {{ $users->firstItem() + $loop->index }}
+                            </td>
                             <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                 {{ $user->name }}
                             </td>
@@ -78,7 +82,10 @@
                             <td class="px-6 py-4">
                                 {{ $user->no_hp ?? '-' }}
                             </td>
-                            <td class="px-6 py-4 flex items-center gap-2">
+                            <td class="px-6 py-4 flex items-center gap-3">
+                                <a href="{{ route('admin.users.show', $user) }}"
+                                    class="font-medium text-green-600 hover:underline">Detail</a>
+
                                 <a href="{{ route('admin.users.edit', $user) }}"
                                     class="font-medium text-blue-600 hover:underline">Edit</a>
 
@@ -94,7 +101,7 @@
                         </tr>
                     @empty
                         <tr class="bg-white border-b hover:bg-gray-50">
-                            <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+                            <td colspan="5" class="px-6 py-4 text-center text-gray-500">
                                 @if (request('search'))
                                     Data user dengan pencarian "{{ request('search') }}" tidak ditemukan.
                                 @else

@@ -62,6 +62,18 @@ class UserController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+    public function show(User $user)
+    {
+        if ($user->role !== 'user') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('admin.users.show', compact('user'));
+    }
+
+    /**
      * Show the form for editing the specified resource.
      */
     public function edit(User $user)

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Order; // Assuming Order model is in App\Models namespace
 
 class Produk extends Model
 {

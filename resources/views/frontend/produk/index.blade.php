@@ -39,7 +39,7 @@
     {{-- Info Banner --}}
     <section class="py-12 px-4 bg-white">
         <div
-            class="max-w-4xl mx-auto bg-gradient-to-r from-blue-50 to-amber-50 rounded-2xl p-8 border border-gray-100 text-center">
+            class="max-w-4xl mx-auto bg-linear-to-r from-blue-50 to-amber-50 rounded-2xl p-8 border border-gray-100 text-center">
             <h3 class="text-xl font-bold text-gray-900 mb-2">Tidak menemukan yang Anda cari?</h3>
             <p class="text-gray-500 text-sm mb-6">Hubungi kami untuk diskusi kebutuhan cetak custom Anda. Kami terima semua
                 jenis pesanan cetak.</p>

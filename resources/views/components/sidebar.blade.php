@@ -17,6 +17,45 @@
                      <span class="ms-3">Dashboard</span>
                  </a>
              <li>
+                 <a href="{{ route('admin.orders.index') }}"
+                     class="flex items-center px-3 py-2 text-gray-900 rounded-lg hover:bg-gray-100 group transition-colors {{ request()->routeIs('admin.orders.*') ? 'bg-gray-100 shadow-sm' : '' }}">
+                     <svg class="w-5 h-5 transition duration-75 text-gray-500 group-hover:text-gray-900 {{ request()->routeIs('admin.orders.*') ? 'text-gray-900' : '' }}"
+                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         fill="none" viewBox="0 0 24 24">
+                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                             d="M9 10V6a3 3 0 0 1 3-3v0a3 3 0 0 1 3 3v4m3-2 .917 7.336a2 2 0 0 1-1.987 2.247H6.07a2 2 0 0 1-1.987-2.247L5 8h14Z" />
+                     </svg>
+                     <span class="ms-3">Kelola Pesanan</span>
+                 </a>
+             </li>
+
+             <li>
+                 <a href="{{ route('admin.portfolios.index') }}"
+                     class="flex items-center px-3 py-2 text-gray-900 rounded-lg hover:bg-gray-100 group transition-colors {{ request()->routeIs('admin.portfolios.*') ? 'bg-gray-100 shadow-sm' : '' }}">
+                     <svg class="w-5 h-5 transition duration-75 text-gray-500 group-hover:text-gray-900 {{ request()->routeIs('admin.portfolios.*') ? 'text-gray-900' : '' }}"
+                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         fill="none" viewBox="0 0 24 24">
+                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                             d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                     </svg>
+                     <span class="ms-3">Kelola Portofolio</span>
+                 </a>
+             </li>
+
+             <li>
+                 <a href="{{ route('admin.produks.index') }}"
+                     class="flex items-center px-3 py-2 text-gray-900 rounded-lg hover:bg-gray-100 group transition-colors {{ request()->routeIs('admin.produks.*') ? 'bg-gray-100 shadow-sm' : '' }}">
+                     <svg class="w-5 h-5 transition duration-75 text-gray-500 group-hover:text-gray-900 {{ request()->routeIs('admin.produks.*') ? 'text-gray-900' : '' }}"
+                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         fill="none" viewBox="0 0 24 24">
+                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                             d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                     </svg>
+                     <span class="ms-3">Kelola Produk</span>
+                 </a>
+             </li>
+
+             <li>
                  <a href="{{ route('admin.users.index') }}"
                      class="flex items-center px-3 py-2 text-gray-900 rounded-lg hover:bg-gray-100 group transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-gray-100 shadow-sm' : '' }}">
                      <svg class="w-5 h-5 transition duration-75 text-gray-500 group-hover:text-gray-900 {{ request()->routeIs('admin.users.*') ? 'text-gray-900' : '' }}"
@@ -33,7 +72,8 @@
 
              <!-- Spacer before back to site link -->
              <li class="pt-4 mt-4 border-t border-gray-200">
-                 <a href="{{ route('beranda') }}" class="flex items-center px-3 py-2 rounded-lg group transition-colors"
+                 <a href="{{ route('beranda') }}"
+                     class="flex items-center px-3 py-2 rounded-lg group transition-colors"
                      style="color: #1e3a5f; background-color: #f3f4f6;">
                      <svg class="shrink-0 w-5 h-5 transition duration-75" style="color: #1e3a5f;" aria-hidden="true"
                          xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
