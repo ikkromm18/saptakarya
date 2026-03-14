@@ -24,6 +24,7 @@
                     <table class="w-full text-sm text-left text-gray-500">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-100">
                             <tr>
+                                <th scope="col" class="px-6 py-4">No</th>
                                 <th scope="col" class="px-6 py-4">Kode Pesanan</th>
                                 <th scope="col" class="px-6 py-4">Produk</th>
                                 <th scope="col" class="px-6 py-4">Total</th>
@@ -35,6 +36,9 @@
                         <tbody>
                             @forelse ($orders as $order)
                                 <tr class="bg-white border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                        {{ $loop->iteration }}
+                                    </td>
                                     <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                         {{ $order->kode_pesanan }}
                                     </td>

@@ -56,6 +56,24 @@
              </li>
 
              <li>
+                 <a href="{{ route('admin.testimonis.index') }}"
+                     class="flex items-center px-3 py-2 text-gray-900 rounded-lg hover:bg-gray-100 group transition-colors {{ request()->routeIs('admin.testimonis.*') ? 'bg-gray-100 shadow-sm' : '' }}">
+                     <svg class="w-5 h-5 transition duration-75 text-gray-500 group-hover:text-gray-900 {{ request()->routeIs('admin.testimonis.*') ? 'text-gray-900' : '' }}"
+                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                         fill="none" viewBox="0 0 24 24">
+                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                             d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                     </svg>
+                     <span class="ms-3 flex-1">Kelola Testimoni</span>
+                     @php $pendingCount = \App\Models\Testimoni::where('status','pending')->count(); @endphp
+                     @if ($pendingCount > 0)
+                         <span
+                             class="inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-yellow-500 rounded-full">{{ $pendingCount }}</span>
+                     @endif
+                 </a>
+             </li>
+
+             <li>
                  <a href="{{ route('admin.users.index') }}"
                      class="flex items-center px-3 py-2 text-gray-900 rounded-lg hover:bg-gray-100 group transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-gray-100 shadow-sm' : '' }}">
                      <svg class="w-5 h-5 transition duration-75 text-gray-500 group-hover:text-gray-900 {{ request()->routeIs('admin.users.*') ? 'text-gray-900' : '' }}"

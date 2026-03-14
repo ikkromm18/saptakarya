@@ -10,9 +10,6 @@ use Illuminate\Support\Str;
 
 class ProdukController extends Controller
 {
-    /**
-     * Display a listing of products.
-     */
     public function index(Request $request)
     {
         $query = Produk::latest();
@@ -26,52 +23,39 @@ class ProdukController extends Controller
         return view('admin.produks.index', compact('produks'));
     }
 
-    /**
-     * Show the form for creating a new product.
-     */
     public function create()
     {
         return view('admin.produks.create');
     }
 
-    /**
-     * Store a newly created product in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'nama'      => 'required|string|max:255',
             'deskripsi' => 'required|string|max:2000',
-            'harga_min' => 'required|integer|min:0',
-            'harga_max' => 'required|integer|min:0|gte:harga_min',
             'ukuran'    => 'nullable|string',
             'bahan'     => 'nullable|string',
             'foto'      => 'required|image|mimes:jpg,jpeg,png,webp|max:3072',
         ], [
-            'nama.required'       => 'Nama produk wajib diisi.',
-            'deskripsi.required'  => 'Deskripsi wajib diisi.',
-            'harga_min.required'  => 'Harga minimum wajib diisi.',
-            'harga_max.required'  => 'Harga maksimum wajib diisi.',
-            'harga_max.gte'       => 'Harga maksimum harus lebih besar atau sama dengan harga minimum.',
-            'foto.required'       => 'Foto produk wajib diunggah.',
-            'foto.image'          => 'File harus berupa gambar.',
-            'foto.mimes'          => 'Format gambar harus jpg, jpeg, png, atau webp.',
-            'foto.max'            => 'Ukuran foto maksimal 3 MB.',
+            'nama.required'      => 'Nama produk wajib diisi.',
+            'deskripsi.required' => 'Deskripsi wajib diisi.',
+            'foto.required'      => 'Foto produk wajib diunggah.',
+            'foto.image'         => 'File harus berupa gambar.',
+            'foto.mimes'         => 'Format gambar harus jpg, jpeg, png, atau webp.',
+            'foto.max'           => 'Ukuran foto maksimal 3 MB.',
         ]);
 
-        // Parse ukuran & bahan: satu per baris → array
-        $validated['ukuran'] = $this->parseLines($request->ukuran);
-        $validated['bahan']  = $this->parseLines($request->bahan);
+        $ukuranList = $this->parseLines($request->ukuran);
+        $bahanList  = $this->parseLines($request->bahan);
 
-        // Generate slug
-        $validated['slug'] = Str::slug($validated['nama']);
-        // Ensure uniqueness
-        $count = Produk::where('slug', $validated['slug'])->count();
-        if ($count > 0) {
-            $validated['slug'] .= '-' . ($count + 1);
-        }
+        $validated['ukuran'] = $ukuranList;
+        $validated['bahan']  = $bahanList;
+        $validated['harga']  = $this->parseHargaMatrix($request->input('harga', []), $ukuranList, $bahanList);
 
-        // Upload foto
+        [$validated['harga_min'], $validated['harga_max']] = $this->computeMinMax($validated['harga']);
+
+        $validated['slug'] = $this->uniqueSlug($validated['nama']);
+
         $path = $request->file('foto')->store('produks', 'public');
         $validated['foto'] = Storage::url($path);
 
@@ -81,50 +65,43 @@ class ProdukController extends Controller
             ->with('success', 'Produk berhasil ditambahkan.');
     }
 
-    /**
-     * Show the form for editing the specified product.
-     */
     public function edit(Produk $produk)
     {
         return view('admin.produks.edit', compact('produk'));
     }
 
-    /**
-     * Update the specified product in storage.
-     */
     public function update(Request $request, Produk $produk)
     {
         $validated = $request->validate([
             'nama'      => 'required|string|max:255',
             'deskripsi' => 'required|string|max:2000',
-            'harga_min' => 'required|integer|min:0',
-            'harga_max' => 'required|integer|min:0|gte:harga_min',
             'ukuran'    => 'nullable|string',
             'bahan'     => 'nullable|string',
             'foto'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:3072',
         ], [
-            'nama.required'       => 'Nama produk wajib diisi.',
-            'deskripsi.required'  => 'Deskripsi wajib diisi.',
-            'harga_min.required'  => 'Harga minimum wajib diisi.',
-            'harga_max.required'  => 'Harga maksimum wajib diisi.',
-            'harga_max.gte'       => 'Harga maksimum harus ≥ harga minimum.',
-            'foto.image'          => 'File harus berupa gambar.',
-            'foto.mimes'          => 'Format gambar harus jpg, jpeg, png, atau webp.',
-            'foto.max'            => 'Ukuran foto maksimal 3 MB.',
+            'nama.required'      => 'Nama produk wajib diisi.',
+            'deskripsi.required' => 'Deskripsi wajib diisi.',
+            'foto.image'         => 'File harus berupa gambar.',
+            'foto.mimes'         => 'Format gambar harus jpg, jpeg, png, atau webp.',
+            'foto.max'           => 'Ukuran foto maksimal 3 MB.',
         ]);
 
-        $validated['ukuran'] = $this->parseLines($request->ukuran);
-        $validated['bahan']  = $this->parseLines($request->bahan);
+        $ukuranList = $this->parseLines($request->ukuran);
+        $bahanList  = $this->parseLines($request->bahan);
 
-        // Re-generate slug only if name changed
+        $validated['ukuran'] = $ukuranList;
+        $validated['bahan']  = $bahanList;
+        $validated['harga']  = $this->parseHargaMatrix($request->input('harga', []), $ukuranList, $bahanList);
+
+        [$validated['harga_min'], $validated['harga_max']] = $this->computeMinMax($validated['harga']);
+
         if ($validated['nama'] !== $produk->nama) {
-            $slug  = Str::slug($validated['nama']);
+            $slug = Str::slug($validated['nama']);
             $count = Produk::where('slug', $slug)->where('id', '!=', $produk->id)->count();
             $validated['slug'] = $count > 0 ? $slug . '-' . ($count + 1) : $slug;
         }
 
         if ($request->hasFile('foto')) {
-            // Delete old local file
             $oldPath = str_replace('/storage/', '', parse_url($produk->foto, PHP_URL_PATH));
             if (Storage::disk('public')->exists($oldPath)) {
                 Storage::disk('public')->delete($oldPath);
@@ -141,24 +118,22 @@ class ProdukController extends Controller
             ->with('success', 'Produk berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified product from storage.
-     */
     public function destroy(Produk $produk)
     {
         $oldPath = str_replace('/storage/', '', parse_url($produk->foto, PHP_URL_PATH));
         if (Storage::disk('public')->exists($oldPath)) {
             Storage::disk('public')->delete($oldPath);
         }
-
         $produk->delete();
 
         return redirect()->route('admin.produks.index')
             ->with('success', 'Produk berhasil dihapus.');
     }
 
+    // ── Helpers ──────────────────────────────────────────────────────────
+
     /**
-     * Convert newline-separated text to a clean array (or null if empty).
+     * Parse newline-separated text into a clean array, or null if blank.
      */
     private function parseLines(?string $value): ?array
     {
@@ -167,5 +142,63 @@ class ProdukController extends Controller
         }
         $lines = array_filter(array_map('trim', explode("\n", $value)));
         return count($lines) > 0 ? array_values($lines) : null;
+    }
+
+    /**
+     * Build nested harga array from submitted harga[ukuran][bahan] inputs.
+     * Skips cells with 0 or empty value.
+     */
+    private function parseHargaMatrix(array $rawHarga, ?array $ukuranList, ?array $bahanList): ?array
+    {
+        if (!$ukuranList && !$bahanList) {
+            // flat pricing: harga['__flat__']['__flat__']
+            $flat = (int) ($rawHarga['__flat__']['__flat__'] ?? 0);
+            return $flat > 0 ? ['__flat__' => ['__flat__' => $flat]] : null;
+        }
+
+        $matrix = [];
+
+        $ukurans = $ukuranList ?? ['__flat__'];
+        $bahans  = $bahanList  ?? ['__flat__'];
+
+        foreach ($ukurans as $uk) {
+            foreach ($bahans as $bh) {
+                $price = (int) ($rawHarga[$uk][$bh] ?? 0);
+                if ($price > 0) {
+                    $matrix[$uk][$bh] = $price;
+                }
+            }
+        }
+
+        return count($matrix) > 0 ? $matrix : null;
+    }
+
+    /**
+     * Compute [min, max] from the harga matrix.
+     */
+    private function computeMinMax(?array $harga): array
+    {
+        if (blank($harga)) {
+            return [0, 0];
+        }
+        $prices = [];
+        foreach ($harga as $ukuranPrices) {
+            foreach ((array) $ukuranPrices as $price) {
+                if ($price > 0) {
+                    $prices[] = $price;
+                }
+            }
+        }
+        return count($prices) > 0 ? [min($prices), max($prices)] : [0, 0];
+    }
+
+    /**
+     * Generate a unique slug for the given name.
+     */
+    private function uniqueSlug(string $name): string
+    {
+        $slug  = Str::slug($name);
+        $count = Produk::where('slug', $slug)->count();
+        return $count > 0 ? $slug . '-' . ($count + 1) : $slug;
     }
 }

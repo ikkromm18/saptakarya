@@ -10,7 +10,7 @@
                 <form action="{{ route('admin.orders.index') }}" method="GET"
                     class="flex flex-col md:flex-row items-center gap-2 w-full">
                     <div class="relative w-full md:w-64">
-                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <div class="absolute inset-y-0 inset-s-0 flex items-center ps-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                 fill="none" viewBox="0 0 20 20">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -37,7 +37,7 @@
                     </select>
 
                     <button type="submit"
-                        class="text-white bg-[#1e3a5f] hover:bg-[#152842] focus:ring-4 focus:outline-none focus:ring-[#1e3a5f]/50 font-medium rounded-lg text-sm px-4 py-2 w-full md:w-auto">Search</button>
+                        class="text-white bg-brand-800 hover:bg-brand-900 focus:ring-4 focus:outline-none focus:ring-brand-800/50 font-medium rounded-lg text-sm px-4 py-2 w-full md:w-auto">Search</button>
 
                     @if (request('search') || request('status'))
                         <a href="{{ route('admin.orders.index') }}"
@@ -49,7 +49,7 @@
 
         @if (session('success'))
             <div id="alert-success" class="flex items-center p-4 mb-4 text-green-800 rounded-lg bg-green-50" role="alert">
-                <svg class="flex-shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                <svg class="shrink-0 w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                     viewBox="0 0 20 20">
                     <path
                         d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
@@ -75,6 +75,7 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                     <tr>
+                        <th scope="col" class="px-6 py-4">No</th>
                         <th scope="col" class="px-6 py-4">Status</th>
                         <th scope="col" class="px-6 py-4">Kode Pesanan</th>
                         <th scope="col" class="px-6 py-4">User</th>
@@ -86,6 +87,9 @@
                 <tbody class="divide-y divide-gray-100">
                     @forelse($orders as $order)
                         <tr class="bg-white hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                {{ $loop->iteration }}
+                            </td>
                             <td class="px-6 py-4">
                                 <span
                                     class="px-2.5 py-1 text-[10px] font-bold uppercase rounded-full {{ $order->status_badge }}">

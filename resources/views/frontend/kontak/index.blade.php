@@ -56,10 +56,10 @@
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-900 text-sm mb-1">Telepon & WhatsApp</h3>
-                                <a href="tel:+6281234567890"
-                                    class="text-gray-500 text-sm hover:text-gray-900 transition-colors block">+62
-                                    812-3456-7890</a>
-                                <a href="https://wa.me/6281234567890" target="_blank"
+                                <a href="tel:+{{ $adminPhone }}"
+                                    class="text-gray-500 text-sm hover:text-gray-900 transition-colors block">+{{ substr($adminPhone, 0, 2) }}
+                                    {{ substr($adminPhone, 2, 3) }}-{{ substr($adminPhone, 5, 4) }}-{{ substr($adminPhone, 9) }}</a>
+                                <a href="https://wa.me/{{ $adminPhone }}" target="_blank"
                                     class="text-sm font-medium mt-2 inline-flex items-center gap-1.5"
                                     style="color: #25d366;">
                                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">

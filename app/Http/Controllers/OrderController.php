@@ -17,10 +17,10 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'produk_id' => 'required|exists:produks,id',
-            'jumlah' => 'required|integer|min:1',
+            'produk_id'  => 'required|exists:produks,id',
+            'jumlah'     => 'required|integer|min:1',
             'file_desain' => 'nullable|file|mimes:jpg,jpeg,png,pdf,zip,rar|max:10240',
-            'catatan' => 'nullable|string',
+            'catatan'    => 'nullable|string',
         ]);
 
         $produk = Produk::findOrFail($request->produk_id);
@@ -33,7 +33,28 @@ class OrderController extends Controller
             $request->validate(['bahan' => 'required|string']);
         }
 
-        $total_harga = $produk->harga_max * $request->jumlah;
+        // ── Determine harga_satuan ───────────────────────────────────────
+        $ukuranKey = $request->ukuran ?? '__flat__';
+        $bahanKey  = $request->bahan  ?? '__flat__';
+
+        $hargaSatuan = 0;
+
+        if ($produk->harga) {
+            // Try exact ukuran×bahan key
+            $hargaSatuan = (int) ($produk->harga[$ukuranKey][$bahanKey] ?? 0);
+
+            // Fallback: flat pricing (no ukuran/bahan distinction)
+            if ($hargaSatuan === 0) {
+                $hargaSatuan = (int) ($produk->harga['__flat__']['__flat__'] ?? 0);
+            }
+        }
+
+        // Final fallback to harga_max if pricing matrix not set
+        if ($hargaSatuan === 0) {
+            $hargaSatuan = (int) $produk->harga_max;
+        }
+
+        $total_harga = $hargaSatuan * $request->jumlah;
 
         $file_desain_path = null;
         if ($request->hasFile('file_desain')) {
@@ -41,16 +62,17 @@ class OrderController extends Controller
         }
 
         $order = Order::create([
-            'user_id' => Auth::user()->id,
-            'produk_id' => $produk->id,
+            'user_id'      => Auth::user()->id,
+            'produk_id'    => $produk->id,
             'kode_pesanan' => 'INV-' . date('Ymd') . '-' . strtoupper(Str::random(6)),
-            'ukuran' => $request->ukuran,
-            'bahan' => $request->bahan,
-            'jumlah' => $request->jumlah,
-            'total_harga' => $total_harga,
-            'file_desain' => $file_desain_path,
-            'status' => 'pending',
-            'catatan' => $request->catatan,
+            'ukuran'       => $request->ukuran,
+            'bahan'        => $request->bahan,
+            'jumlah'       => $request->jumlah,
+            'harga_satuan' => $hargaSatuan,
+            'total_harga'  => $total_harga,
+            'file_desain'  => $file_desain_path,
+            'status'       => 'pending',
+            'catatan'      => $request->catatan,
         ]);
 
         return redirect()->route('orders.index')->with('success', 'Pesanan berhasil dibuat. Silakan lakukan pembayaran.');

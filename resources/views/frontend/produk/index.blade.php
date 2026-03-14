@@ -43,7 +43,7 @@
             <h3 class="text-xl font-bold text-gray-900 mb-2">Tidak menemukan yang Anda cari?</h3>
             <p class="text-gray-500 text-sm mb-6">Hubungi kami untuk diskusi kebutuhan cetak custom Anda. Kami terima semua
                 jenis pesanan cetak.</p>
-            <a href="https://wa.me/6281234567890?text=Halo%20Saptakarya%2C%20saya%20ingin%20tanya%20tentang%20cetak%20custom..."
+            <a href="https://wa.me/{{ $adminPhone }}?text=Halo%20Saptakarya%2C%20saya%20ingin%20tanya%20tentang%20cetak%20custom..."
                 target="_blank" class="btn-primary text-sm">
                 Konsultasi Gratis via WhatsApp
             </a>

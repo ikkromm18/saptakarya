@@ -87,7 +87,7 @@
                 {{-- Visi --}}
                 <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
                             style="background-color: #1e3a5f;">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -110,7 +110,7 @@
                 {{-- Misi --}}
                 <div class="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
+                        <div class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
                             style="background-color: #c9a84c;">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -126,7 +126,7 @@
                         @php $misiBullets = ['Menyediakan layanan cetak & sablon berkualitas premium dengan harga yang kompetitif dan terjangkau.', 'Menggunakan teknologi dan peralatan modern untuk menghasilkan produk cetak terbaik.', 'Memberikan pelayanan yang ramah, cepat, dan transparan kepada setiap pelanggan.', 'Terus berinovasi dalam desain dan teknik percetakan mengikuti perkembangan industri.', 'Membangun hubungan jangka panjang dengan pelanggan melalui kepercayaan dan konsistensi.']; @endphp
                         @foreach ($misiBullets as $misi)
                             <li class="flex items-start gap-3 text-gray-600 text-sm">
-                                <svg class="w-5 h-5 flex-shrink-0 mt-0.5" style="color: #1e3a5f;" fill="none"
+                                <svg class="w-5 h-5 shrink-0 mt-0.5" style="color: #1e3a5f;" fill="none"
                                     stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />

@@ -32,6 +32,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::resource('admin/produks', \App\Http\Controllers\Admin\ProdukController::class)
         ->names('admin.produks');
+
+    // Testimoni management
+    Route::get('admin/testimonis', [\App\Http\Controllers\Admin\TestimoniAdminController::class, 'index'])->name('admin.testimonis.index');
+    Route::patch('admin/testimonis/{testimoni}/status', [\App\Http\Controllers\Admin\TestimoniAdminController::class, 'updateStatus'])->name('admin.testimonis.status');
+    Route::delete('admin/testimonis/{testimoni}', [\App\Http\Controllers\Admin\TestimoniAdminController::class, 'destroy'])->name('admin.testimonis.destroy');
 });
 
 Route::middleware('guest')->group(function () {
@@ -54,4 +59,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::post('/orders/{order}/payment', [OrderController::class, 'uploadPayment'])->name('orders.payment');
+
+    // Testimoni User
+    Route::post('/testimoni', [\App\Http\Controllers\TestimoniController::class, 'store'])->name('testimoni.store');
 });

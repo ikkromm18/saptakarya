@@ -16,6 +16,7 @@ class Order extends Model
         'ukuran',
         'bahan',
         'jumlah',
+        'harga_satuan',
         'total_harga',
         'file_desain',
         'bukti_bayar',

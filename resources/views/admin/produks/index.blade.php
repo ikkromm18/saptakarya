@@ -66,6 +66,7 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                     <tr>
+                        <th scope="col" class="px-6 py-4">No</th>
                         <th scope="col" class="px-4 py-4 w-20">Foto</th>
                         <th scope="col" class="px-6 py-4">Nama Produk</th>
                         <th scope="col" class="px-6 py-4">Kisaran Harga</th>
@@ -77,6 +78,9 @@
                 <tbody class="divide-y divide-gray-100">
                     @forelse ($produks as $produk)
                         <tr class="bg-white hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                {{ $loop->iteration }}
+                            </td>
                             <td class="px-4 py-3">
                                 <img src="{{ filter_var($produk->foto, FILTER_VALIDATE_URL) ? $produk->foto : asset($produk->foto) }}"
                                     alt="{{ $produk->nama }}"

@@ -3,8 +3,9 @@
 <div class="card-hover bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm flex flex-col">
     {{-- Photo --}}
     <div class="relative overflow-hidden h-48">
-        <img src="{{ $produk->foto }}" alt="{{ $produk->nama }}"
-            class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" loading="lazy">
+        <img src="{{ filter_var($produk->foto, FILTER_VALIDATE_URL) ? $produk->foto : asset($produk->foto) }}"
+            alt="{{ $produk->nama }}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+            loading="lazy">
     </div>
 
     {{-- Content --}}
@@ -42,9 +43,17 @@
             <div>
                 <p class="text-xs text-gray-400">Kisaran Harga</p>
                 <p class="font-bold text-sm" style="color: #c9a84c;">
-                    Rp {{ number_format($produk->harga_min, 0, ',', '.') }}
-                    –
-                    Rp {{ number_format($produk->harga_max, 0, ',', '.') }}
+                    @if ($produk->min_price > 0)
+                        Rp {{ number_format($produk->min_price, 0, ',', '.') }}
+                        @if ($produk->min_price !== $produk->max_price)
+                            – Rp {{ number_format($produk->max_price, 0, ',', '.') }}
+                        @endif
+                    @else
+                        Rp {{ number_format($produk->harga_min, 0, ',', '.') }}
+                        @if ($produk->harga_min !== $produk->harga_max)
+                            – Rp {{ number_format($produk->harga_max, 0, ',', '.') }}
+                        @endif
+                    @endif
                 </p>
             </div>
 
@@ -54,9 +63,7 @@
                     Pesan
                 </button>
             @else
-                <a href="{{ route('login') }}" class="btn-primary text-xs py-2 px-3">
-                    Login
-                </a>
+                <a href="{{ route('login') }}" class="btn-primary text-xs py-2 px-3">Login</a>
             @endauth
         </div>
     </div>
@@ -64,18 +71,20 @@
 
 {{-- Order Modal --}}
 @auth
+    {{-- Embed harga matrix as JS data for realtime price lookup --}}
+    <script>
+        window.PRODUK_HARGA_{{ $produk->id }} = @json($produk->harga ?? []);
+    </script>
+
     <div id="order-modal-{{ $produk->id }}" tabindex="-1" aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
-            <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow-sm">
-                <!-- Modal header -->
+                {{-- Modal header --}}
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t border-gray-200">
-                    <h3 class="text-xl font-semibold text-gray-900">
-                        Pesan {{ $produk->nama }}
-                    </h3>
+                    <h3 class="text-xl font-semibold text-gray-900">Pesan {{ $produk->nama }}</h3>
                     <button type="button"
-                        class="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
+                        class="inset-e-25 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center"
                         data-modal-hide="order-modal-{{ $produk->id }}">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
@@ -85,20 +94,24 @@
                         <span class="sr-only">Tutup modal</span>
                     </button>
                 </div>
-                <!-- Modal body -->
+
+                {{-- Modal body --}}
                 <div class="p-4 md:p-5">
                     <form class="space-y-4" action="{{ route('orders.store') }}" method="POST"
-                        enctype="multipart/form-data">
+                        enctype="multipart/form-data" onsubmit="syncHargaSatuan({{ $produk->id }})">
                         @csrf
                         <input type="hidden" name="produk_id" value="{{ $produk->id }}">
+                        <input type="hidden" name="harga_satuan" id="hidden-harga-satuan-{{ $produk->id }}"
+                            value="0">
 
+                        {{-- Pilih Ukuran --}}
                         @if ($produk->ukuran && count($produk->ukuran) > 0)
                             <div>
                                 <label for="ukuran-{{ $produk->id }}"
                                     class="block mb-2 text-sm font-medium text-gray-900">Ukuran</label>
                                 <select name="ukuran" id="ukuran-{{ $produk->id }}"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                    required>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                    onchange="updateHarga({{ $produk->id }})" required>
                                     <option value="">Pilih Ukuran</option>
                                     @foreach ($produk->ukuran as $uk)
                                         <option value="{{ $uk }}">{{ $uk }}</option>
@@ -107,13 +120,14 @@
                             </div>
                         @endif
 
+                        {{-- Pilih Bahan --}}
                         @if ($produk->bahan && count($produk->bahan) > 0)
                             <div>
                                 <label for="bahan-{{ $produk->id }}"
                                     class="block mb-2 text-sm font-medium text-gray-900">Bahan</label>
                                 <select name="bahan" id="bahan-{{ $produk->id }}"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                    required>
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                    onchange="updateHarga({{ $produk->id }})" required>
                                     <option value="">Pilih Bahan</option>
                                     @foreach ($produk->bahan as $bhn)
                                         <option value="{{ $bhn }}">{{ $bhn }}</option>
@@ -122,42 +136,136 @@
                             </div>
                         @endif
 
+                        {{-- Harga tampil realtime --}}
+                        <div id="harga-display-{{ $produk->id }}"
+                            class="hidden p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-gray-600">Harga per pcs:</span>
+                                <span id="harga-text-{{ $produk->id }}" class="font-bold text-base"
+                                    style="color:#c9a84c;"></span>
+                            </div>
+                        </div>
+
+                        {{-- Jumlah --}}
                         <div>
                             <label for="jumlah-{{ $produk->id }}"
                                 class="block mb-2 text-sm font-medium text-gray-900">Jumlah Pesanan</label>
                             <input type="number" name="jumlah" id="jumlah-{{ $produk->id }}"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                                placeholder="1" value="1" min="1" required>
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                placeholder="1" value="1" min="1" required
+                                oninput="updateHarga({{ $produk->id }})">
                         </div>
 
+                        {{-- Total Harga --}}
+                        <div id="total-display-{{ $produk->id }}"
+                            class="hidden p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm font-semibold text-gray-700">Total Estimasi:</span>
+                                <span id="total-text-{{ $produk->id }}" class="font-bold text-base text-blue-700"></span>
+                            </div>
+                        </div>
+
+                        {{-- File Desain --}}
                         <div>
                             <label class="block mb-2 text-sm font-medium text-gray-900"
-                                for="file_desain-{{ $produk->id }}">Upload File Desain (Opsional)</label>
+                                for="file_desain-{{ $produk->id }}">
+                                Upload File Desain (Opsional)
+                            </label>
                             <input
                                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
-                                aria-describedby="file_desain_help" id="file_desain-{{ $produk->id }}" name="file_desain"
-                                type="file" accept=".jpg,.jpeg,.png,.pdf,.zip,.rar">
-                            <p class="mt-1 text-xs text-gray-500" id="file_desain_help">PDF, JPG, PNG, ZIP (Max 10MB).</p>
+                                id="file_desain-{{ $produk->id }}" name="file_desain" type="file"
+                                accept=".jpg,.jpeg,.png,.pdf,.zip,.rar">
+                            <p class="mt-1 text-xs text-gray-500">PDF, JPG, PNG, ZIP (Max 10MB).</p>
                         </div>
 
+                        {{-- Catatan --}}
                         <div>
                             <label for="catatan-{{ $produk->id }}"
-                                class="block mb-2 text-sm font-medium text-gray-900">Catatan Tambahan (Opsional)</label>
+                                class="block mb-2 text-sm font-medium text-gray-900">
+                                Catatan Tambahan (Opsional)
+                            </label>
                             <textarea name="catatan" id="catatan-{{ $produk->id }}" rows="3"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5"
                                 placeholder="Instruksi khusus, dll..."></textarea>
                         </div>
 
                         <button type="submit"
-                            class="w-full text-white bg-[#1e3a5f] hover:bg-[#152842] focus:ring-4 focus:outline-none focus:ring-[#1e3a5f]/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            class="w-full text-white bg-brand-800 hover:bg-brand-700 focus:ring-4 focus:outline-none focus:ring-brand-800/50 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Buat Pesanan
                         </button>
-                        <p class="text-xs text-center text-gray-500 mt-2">Harga total adalah <span
-                                class="font-semibold text-gray-900">Harga Max × Jumlah</span>. Harga sebenarnya mungkin
-                            lebih murah atau disesuaikan.</p>
+                        <p class="text-xs text-center text-gray-500 mt-1">
+                            Harga final mungkin disesuaikan oleh admin setelah pesanan diterima.
+                        </p>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function updateHarga(produkId) {
+            const hargaMatrix = window['PRODUK_HARGA_' + produkId] || {};
+
+            const ukuranEl = document.getElementById('ukuran-' + produkId);
+            const bahanEl = document.getElementById('bahan-' + produkId);
+            const jumlahEl = document.getElementById('jumlah-' + produkId);
+
+            const ukuranVal = ukuranEl ? ukuranEl.value : '__flat__';
+            const bahanVal = bahanEl ? bahanEl.value : '__flat__';
+            const ukuranKey = ukuranVal || '__flat__';
+            const bahanKey = bahanVal || '__flat__';
+
+            let harga = 0;
+
+            // Exact key lookup
+            if (hargaMatrix[ukuranKey] && hargaMatrix[ukuranKey][bahanKey]) {
+                harga = parseInt(hargaMatrix[ukuranKey][bahanKey], 10);
+            }
+            // Only one dimension selected? Try flat fallback
+            if (!harga && hargaMatrix['__flat__'] && hargaMatrix['__flat__']['__flat__']) {
+                harga = parseInt(hargaMatrix['__flat__']['__flat__'], 10);
+            }
+
+            const hargaDisplay = document.getElementById('harga-display-' + produkId);
+            const hargaText = document.getElementById('harga-text-' + produkId);
+            const totalDisplay = document.getElementById('total-display-' + produkId);
+            const totalText = document.getElementById('total-text-' + produkId);
+            const hiddenSatuan = document.getElementById('hidden-harga-satuan-' + produkId);
+
+            if (harga > 0 && ukuranKey !== '__flat__' || (bahanKey !== '__flat__' && harga > 0) || (ukuranKey ===
+                    '__flat__' && bahanKey === '__flat__' && harga > 0)) {
+                const jumlah = parseInt(jumlahEl ? jumlahEl.value : 1, 10) || 1;
+                const total = harga * jumlah;
+
+                hargaText.textContent = 'Rp ' + harga.toLocaleString('id-ID');
+                totalText.textContent = 'Rp ' + total.toLocaleString('id-ID');
+                hiddenSatuan.value = harga;
+
+                hargaDisplay.classList.remove('hidden');
+                totalDisplay.classList.remove('hidden');
+            } else {
+                // hide if selection incomplete
+                if ((ukuranEl && !ukuranVal) || (bahanEl && !bahanVal)) {
+                    hargaDisplay.classList.add('hidden');
+                    totalDisplay.classList.add('hidden');
+                    hiddenSatuan.value = 0;
+                }
+            }
+        }
+
+        function syncHargaSatuan(produkId) {
+            // Nothing special needed — hidden input already updated via updateHarga()
+            return true;
+        }
+
+        // Auto-trigger on page load for flat-price products (no ukuran/bahan selector)
+        document.addEventListener('DOMContentLoaded', () => {
+            @php
+                $hasFlatPrice = $produk->harga && isset($produk->harga['__flat__']['__flat__']);
+            @endphp
+            @if ($hasFlatPrice)
+                updateHarga({{ $produk->id }});
+            @endif
+        });
+    </script>
 @endauth

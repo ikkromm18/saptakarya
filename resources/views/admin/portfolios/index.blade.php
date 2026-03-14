@@ -90,6 +90,7 @@
             <table class="w-full text-sm text-left text-gray-500">
                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                     <tr>
+                        <th scope="col" class="px-6 py-4">No</th>
                         <th scope="col" class="px-4 py-4 w-20">Foto</th>
                         <th scope="col" class="px-6 py-4">Judul</th>
                         <th scope="col" class="px-6 py-4">Kategori</th>
@@ -100,6 +101,9 @@
                 <tbody class="divide-y divide-gray-100">
                     @forelse ($portfolios as $portfolio)
                         <tr class="bg-white hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                                {{ $loop->iteration }}
+                            </td>
                             <td class="px-4 py-3">
                                 <img src="{{ $portfolio->foto_url }}" alt="{{ $portfolio->judul }}"
                                     class="w-16 h-12 object-cover rounded-lg border border-gray-200">
