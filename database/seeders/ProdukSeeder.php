@@ -5,15 +5,16 @@ namespace Database\Seeders;
 use App\Models\Produk;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class ProdukSeeder extends Seeder
 {
     public function run(): void
     {
         // Disable FK checks so we can safely clear the table
-        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        Schema::disableForeignKeyConstraints();
         Produk::truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        Schema::enableForeignKeyConstraints();
 
         $produks = [
             // ── Cetak Banner ───────────────────────────────────────
